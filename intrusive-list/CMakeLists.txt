@@ -66,3 +66,8 @@ if(USE_THREAD_SANITIZER)
 endif()
 
 target_link_libraries(tests GTest::gtest GTest::gtest_main)
+
+if(CMAKE_BUILD_TYPE MATCHES "Debug" OR CMAKE_BUILD_TYPE MATCHES "RelWithDebInfo")
+  message(STATUS "Setting DWARF version to 2 for better Valgrind compatibility")
+  target_compile_options(tests PRIVATE -gdwarf-2)
+endif()

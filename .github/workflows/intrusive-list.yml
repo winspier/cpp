@@ -54,6 +54,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install dependencies
+        if: ${{ matrix.compiler.cc == 'clang' }}
         run: |
           sudo apt update
           sudo apt install -y cmake ninja-build g++ valgrind dos2unix curl
