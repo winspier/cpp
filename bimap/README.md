@@ -1,5 +1,6 @@
 # Bimap
 
+
 В этом задании вам необходимо написать [bidirectional map](https://en.wikipedia.org/wiki/Bidirectional_map).
 
 ### Описание структуры
