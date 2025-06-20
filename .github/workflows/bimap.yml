@@ -36,14 +36,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        compiler: [gcc, clang]
+        compiler:
+          - cc: gcc
+            cxx: g++
+          - cc: clang
+            cxx: clang++
         build_type: [Debug, Release, RelWithDebInfo, Sanitized]
         exclude:
           - build_type: Sanitized
 
     env:
-      CC: ${{ matrix.compiler }}
-      CXX: ${{ matrix.compiler }}++
+      CC: ${{ matrix.compiler.cc }}
+      CXX: ${{ matrix.compiler.cxx }}
 
     steps:
       - name: Checkout repository
