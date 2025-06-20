@@ -29,13 +29,11 @@ jobs:
 
       - name: Check line spaces
         run: |
-          pushd asm
-          ../ci-extra/check-lines.sh
-          popd
+          asm/ci-extra/check-lines.sh
 
       - name: Check formatting
         run: |
-          ci-extra/check-asm-formatting.py
+          asm/ci-extra/check-asm-formatting.py
 
       - name: Compile tests
         run: cd asm && stack ghc -- -o test test.hs
