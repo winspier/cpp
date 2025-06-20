@@ -1,0 +1,16 @@
+name: Variant CI
+
+on:
+  push:
+    paths:
+      - 'variant/**'
+  pull_request:
+    paths:
+      - 'variant/**'
+
+jobs:
+  call-workflow:
+    uses: ./.github/workflows/base-ci.yml
+    with:
+      folder: variant
+      name: Variant
