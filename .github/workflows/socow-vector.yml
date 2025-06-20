@@ -1,0 +1,16 @@
+name: Socow-Vector CI
+
+on:
+  push:
+    paths:
+      - 'socow-vector/**'
+  pull_request:
+    paths:
+      - 'socow-vector/**'
+
+jobs:
+  call-workflow:
+    uses: ./.github/workflows/base-ci.yml
+    with:
+      folder: socow-vector
+      name: Socow-Vector
