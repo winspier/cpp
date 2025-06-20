@@ -1,0 +1,86 @@
+name: Bimap CI
+
+on:
+  push:
+    paths:
+      - 'bimap/**'
+  pull_request:
+    paths:
+      - 'bimap/**'
+
+jobs:
+  formatting-check:
+    name: Formatting check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dos2unix
+        run: sudo apt-get install -y dos2unix
+
+      - name: Check line breaks
+        run: ./bimap/ci-extra/check-lines.sh
+
+      - name: Run clang-format style check
+        uses: jidicula/clang-format-action@v4.13.0
+        with:
+          clang-format-version: '18'
+          check-path: 'bimap'
+
+  test:
+    needs: formatting-check
+    name: "Test (${{ matrix.compiler }}, ${{ matrix.build_type }})"
+    runs-on: ubuntu-22.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [gcc, clang]
+        build_type: [Debug, Release, RelWithDebInfo, Sanitized]
+        exclude:
+          - build_type: Sanitized
+
+    env:
+      CC: ${{ matrix.compiler }}
+      CXX: ${{ matrix.compiler }}++
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y cmake ninja-build g++ clang valgrind dos2unix
+
+      - name: Configure flags
+        id: flags
+        run: |
+          FLAGS=""
+          if [[ "${{ matrix.build_type }}" == "Sanitized" ]]; then
+            FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer -g"
+          fi
+          echo "FLAGS=$FLAGS" >> $GITHUB_ENV
+
+      - name: Configure & build
+        run: |
+          mkdir -p bimap/build
+          cd bimap/build
+          cmake .. \
+            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+            -DCMAKE_CXX_FLAGS="$FLAGS"
+          cmake --build . -- -j$(nproc)
+
+      - name: Run tests
+        run: |
+          cd bimap/build
+          ctest --output-on-failure
+
+      - name: Run tests with valgrind
+        if: ${{ matrix.build_type == 'RelWithDebInfo' }}
+        run: |
+          cd bimap/build
+          valgrind --leak-check=full ./tests
