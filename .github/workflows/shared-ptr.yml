@@ -1,0 +1,16 @@
+name: Shared-ptr CI
+
+on:
+  push:
+    paths:
+      - 'shared-ptr/**'
+  pull_request:
+    paths:
+      - 'shared-ptr/**'
+
+jobs:
+  call-workflow:
+    uses: ./.github/workflows/base-ci.yml
+    with:
+      folder: shared-ptr
+      name: Shared-ptr
