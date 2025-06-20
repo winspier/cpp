@@ -1,6 +1,5 @@
 # Optional
 
-
 В этом задании вам необходимо написать [`optional`](https://en.cppreference.com/w/cpp/utility/optional/optional).
 
 Интерфейс вы найдете в репозитории, в файле `optional.h`.
