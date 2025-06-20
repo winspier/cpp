@@ -8,6 +8,11 @@
 #include <ranges>
 #include <utility>
 
+static_assert(std::ranges::range<bitset>);
+static_assert(std::ranges::range<const bitset>);
+static_assert(std::ranges::range<bitset_view<bts::word_type>>);
+static_assert(std::ranges::range<const bitset_view<bts::word_type>>);
+
 TEST_CASE("bitset forward iteration") {
   SECTION("empty") {
     bitset bs;
