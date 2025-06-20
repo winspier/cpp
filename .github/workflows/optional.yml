@@ -1,0 +1,16 @@
+name: Optional CI
+
+on:
+  push:
+    paths:
+      - 'optional/**'
+  pull_request:
+    paths:
+      - 'optional/**'
+
+jobs:
+  call-workflow:
+    uses: ./.github/workflows/base-ci.yml
+    with:
+      folder: optional
+      name: Optional
