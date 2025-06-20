@@ -1,0 +1,84 @@
+name: Bitset CI
+
+on:
+  push:
+    paths:
+      - 'bitset/**'
+  pull_request:
+    paths:
+      - 'bitset/**'
+
+jobs:
+  formatting-check:
+    name: Formatting check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dos2unix
+        run: sudo apt-get install -y dos2unix
+
+      - name: Check line breaks
+        run: ./bitset/ci-extra/check-lines.sh
+
+      - name: Run clang-format style check
+        uses: jidicula/clang-format-action@v4.13.0
+        with:
+          clang-format-version: '18'
+          check-path: 'bitset'
+
+  test:
+    needs: formatting-check
+    name: "Test (${{ matrix.compiler.cxx }}, ${{ matrix.build_type }})"
+    runs-on: ubuntu-22.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler:
+          - cc: gcc
+            cxx: g++
+          - cc: clang
+            cxx: clang++
+        build_type: [Debug, Release, RelWithDebInfo, Sanitized]
+
+    env:
+      CC: ${{ matrix.compiler.cc }}
+      CXX: ${{ matrix.compiler.cxx }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y cmake ninja-build g++ clang valgrind dos2unix
+          git clone https://github.com/microsoft/vcpkg.git
+          ./vcpkg/bootstrap-vcpkg.sh
+          ./vcpkg/vcpkg install catch2
+
+      - name: Set environment variables
+        run: |
+          echo "CMAKE_TOOLCHAIN_FILE=$(pwd)/vcpkg/scripts/buildsystems/vcpkg.cmake" >> $GITHUB_ENV
+          echo "VCPKG_ROOT=$(pwd)/vcpkg" >> $GITHUB_ENV
+          echo "CMAKE_PREFIX_PATH=$(pwd)/vcpkg/installed" >> $GITHUB_ENV
+
+      - name: Build
+        run: |
+          cd bitset
+          ci-extra/build.sh ${{ matrix.build_type }}
+
+      - name: Run tests
+        run: |
+          cd bitset
+          ci-extra/test.sh ${{ matrix.build_type }}
+
+      - name: Run tests with valgrind
+        if: ${{ matrix.build_type == 'RelWithDebInfo' }}
+        run: |
+          cd bitset
+          ci-extra/test-valgrind.sh ${{ matrix.build_type }}
