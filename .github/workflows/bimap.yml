@@ -58,7 +58,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y cmake ninja-build g++ clang valgrind dos2unix
+          sudo apt install -y cmake ninja-build g++ clang valgrind dos2unix catch2
 
       - name: Configure flags
         id: flags
@@ -73,9 +73,7 @@ jobs:
         run: |
           mkdir -p bimap/build
           cd bimap/build
-          cmake .. \
-            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-            -DCMAKE_CXX_FLAGS="$FLAGS"
+          cmake .. -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCatch2_DIR=/usr/lib/cmake/Catch2
           cmake --build . -- -j$(nproc)
 
       - name: Run tests
