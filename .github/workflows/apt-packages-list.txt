@@ -1,0 +1,8 @@
+cmake
+ninja-build
+valgrind
+dos2unix
+curl
+wget
+gnupg
+lsb-release
