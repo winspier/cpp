@@ -13,7 +13,6 @@ add_executable(tests ${TEST_SRC} ${SOLUTION_SRC})
 target_include_directories(tests PRIVATE src test)
 
 enable_testing()
-gtest_discover_tests(tests)
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
   target_compile_options(tests PRIVATE /W4 /permissive-)
