@@ -33,16 +33,16 @@ TEST_CASE("flip") {
   STATIC_REQUIRE(std::is_same_v<tl::flip<std::tuple<>>, std::tuple<>>);
 
   using l11 = tl::type_list<
-    tl::type_list<int, double>,
-    tl::type_list<double, int>,
-    tl::type_list<int, float>,
-    tl::type_list<char, void>>;
+      tl::type_list<int, double>,
+      tl::type_list<double, int>,
+      tl::type_list<int, float>,
+      tl::type_list<char, void>>;
 
   using l12 = tl::type_list<
-    tl::type_list<double, int>,
-    tl::type_list<int, double>,
-    tl::type_list<float, int>,
-    tl::type_list<void, char>>;
+      tl::type_list<double, int>,
+      tl::type_list<int, double>,
+      tl::type_list<float, int>,
+      tl::type_list<void, char>>;
 
   STATIC_REQUIRE(std::is_same_v<tl::flip<l11>, l12>);
   STATIC_REQUIRE(std::is_same_v<tl::flip<l12>, l11>);
@@ -87,51 +87,27 @@ TEST_CASE("flatten") {
   STATIC_REQUIRE(std::is_same_v<tl::flatten<tl::type_list<int, double, float>>, tl::type_list<int, double, float>>);
   STATIC_REQUIRE(std::is_same_v<tl::flatten<tl::type_list<tl::type_list<int>>>, tl::type_list<int>>);
   STATIC_REQUIRE(std::is_same_v<
-                 tl::flatten<tl::type_list<tl::type_list<int>,
-                 tl::type_list<double>,
-                 tl::type_list<float>>>,
-                 tl::type_list<int,
-                 double,
-                 float>>);
+                 tl::flatten<tl::type_list<tl::type_list<int>, tl::type_list<double>, tl::type_list<float>>>,
+                 tl::type_list<int, double, float>>);
   STATIC_REQUIRE(std::is_same_v<
-                 tl::flatten<tl::type_list<int,
-                 tl::type_list<double>,
-                 tl::type_list<float>>>,
-                 tl::type_list<int,
-                 double,
-                 float>>);
+                 tl::flatten<tl::type_list<int, tl::type_list<double>, tl::type_list<float>>>,
+                 tl::type_list<int, double, float>>);
   STATIC_REQUIRE(std::is_same_v<
-                 tl::flatten<tl::type_list<tl::type_list<int,
-                 tl::type_list<double>>,
-                 float>>,
-                 tl::type_list<int,
-                 double,
-                 float>>);
+                 tl::flatten<tl::type_list<tl::type_list<int, tl::type_list<double>>, float>>,
+                 tl::type_list<int, double, float>>);
   STATIC_REQUIRE(std::is_same_v<tl::flatten<tl::type_list<>>, tl::type_list<>>);
   STATIC_REQUIRE(std::is_same_v<tl::flatten<tl::type_list<tl::type_list<tl::type_list<>>>>, tl::type_list<>>);
 
   STATIC_REQUIRE(std::is_same_v<tl::flatten<std::tuple<int, double, float>>, std::tuple<int, double, float>>);
   STATIC_REQUIRE(std::is_same_v<
-                 tl::flatten<std::tuple<std::tuple<int>,
-                 std::tuple<double>,
-                 std::tuple<float>>>,
-                 std::tuple<int,
-                 double,
-                 float>>);
+                 tl::flatten<std::tuple<std::tuple<int>, std::tuple<double>, std::tuple<float>>>,
+                 std::tuple<int, double, float>>);
   STATIC_REQUIRE(std::is_same_v<
-                 tl::flatten<std::tuple<tl::type_list<int>,
-                 tl::type_list<double>,
-                 tl::type_list<float>>>,
-                 std::tuple<int,
-                 double,
-                 float>>);
+                 tl::flatten<std::tuple<tl::type_list<int>, tl::type_list<double>, tl::type_list<float>>>,
+                 std::tuple<int, double, float>>);
   STATIC_REQUIRE(std::is_same_v<
-                 tl::flatten<tl::type_list<std::tuple<int>,
-                 double,
-                 std::tuple<float>>>,
-                 tl::type_list<int,
-                 double,
-                 float>>);
+                 tl::flatten<tl::type_list<std::tuple<int>, double, std::tuple<float>>>,
+                 tl::type_list<int, double, float>>);
 }
 
 template <int N>
