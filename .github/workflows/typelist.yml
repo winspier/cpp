@@ -1,0 +1,16 @@
+name: TypeList CI
+
+on:
+  push:
+    paths:
+      - 'typelist/**'
+  pull_request:
+    paths:
+      - 'typelist/**'
+
+jobs:
+  call-workflow:
+    uses: ./.github/workflows/base-ci.yml
+    with:
+      folder: typelist
+      name: TypeList
