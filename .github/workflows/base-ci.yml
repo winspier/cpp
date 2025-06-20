@@ -72,7 +72,7 @@ jobs:
         run: |
           sudo apt update
           xargs -a .github/workflows/apt-packages-list.txt sudo apt-get install -y
-          git clone https://github.com/microsoft/vcpkg.gitAdd
+          git clone https://github.com/microsoft/vcpkg.git
           ./vcpkg/bootstrap-vcpkg.sh
           ./vcpkg/vcpkg install catch2
 
