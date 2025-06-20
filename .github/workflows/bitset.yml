@@ -56,10 +56,18 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y cmake ninja-build g++ clang valgrind dos2unix
+          sudo apt install -y cmake ninja-build g++ clang valgrind dos2unix curl
           git clone https://github.com/microsoft/vcpkg.git
           ./vcpkg/bootstrap-vcpkg.sh
           ./vcpkg/vcpkg install catch2
+
+      - name: Install and set Clang 17 as default
+        run: |
+          sudo apt install -y clang-17 clang++-17
+          sudo update-alternatives --install /usr/bin/cc cc /usr/bin/clang-17 100
+          sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++-17 100
+          sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-17 100
+          sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-17 100
 
       - name: Set environment variables
         run: |
