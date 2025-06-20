@@ -9,10 +9,8 @@ file(GLOB SOLUTION_SRC src/*.cpp src/*.h)
 file(GLOB TEST_SRC test/*.cpp test/*.h)
 
 add_executable(tests ${TEST_SRC} ${SOLUTION_SRC})
-
+target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
 target_include_directories(tests PRIVATE src test)
-
-enable_testing()
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
   target_compile_options(tests PRIVATE /W4 /permissive-)
