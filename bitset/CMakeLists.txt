@@ -79,3 +79,8 @@ if(CMAKE_BUILD_TYPE MATCHES "Debug")
 endif()
 
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
+
+if(CMAKE_BUILD_TYPE MATCHES "Debug" OR CMAKE_BUILD_TYPE MATCHES "RelWithDebInfo")
+  message(STATUS "Setting DWARF version to 2 for better Valgrind compatibility")
+  target_compile_options(tests PRIVATE -gdwarf-2)
+endif()
